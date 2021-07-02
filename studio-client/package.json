@@ -1,0 +1,8 @@
+{
+  "studioPlugins": [
+    {
+      "mainClass": "com.coremedia.labs.plugins.contenthub.vimeo.ContentHubVimeoStudioPlugin",
+      "name": "Content Hub - Vimeo"
+    }
+  ]
+}

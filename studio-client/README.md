@@ -1,0 +1,3 @@
+The software component within this subfolder of the Blueprint workspace is part of CoreMedia’s modularization and open source initiative. Note that in future releases it will be detached from this workspace and released independently.
+
+As of CoreMedia Content Cloud v10 this component is released under the CoreMedia Open Source License (see LICENSE.txt). The open source license applies only to the software found in the subfolder of this file. Other software license agreements pertaining to CoreMedia Blueprints are not affected by this unless so stated in the README file of the specific subfolder.
