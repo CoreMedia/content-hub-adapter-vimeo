@@ -13,6 +13,7 @@ import com.coremedia.labs.contenthub.adapters.vimeo.model.VimeoItem;
 import com.coremedia.labs.contenthub.adapters.vimeo.model.VimeoVideoItem;
 import com.coremedia.labs.contenthub.adapters.vimeo.service.responses.VideoRepresentation;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,9 @@ public class VimeoContentHubTransformer implements ContentHubTransformer {
     VimeoItem item = (VimeoItem) source;
     LOG.info("Creating content model for item {}.", item);
 
-    ContentModel contentModel = ContentModel.createContentModel(item);
-    contentModel.put("title", item.getName());
+    String contentName = FilenameUtils.removeExtension(item.getName());
+    ContentModel contentModel = ContentModel.createContentModel(contentName, item.getId(), item.getCoreMediaContentType());
+    contentModel.put("title", contentName);
 
     if (item instanceof VimeoVideoItem) {
       VimeoVideoItem videoItem = (VimeoVideoItem) item;
