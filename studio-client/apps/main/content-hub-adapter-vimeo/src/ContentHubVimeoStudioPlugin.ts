@@ -14,27 +14,15 @@ class ContentHubVimeoStudioPlugin extends StudioPlugin {
 
   static readonly xtype: string = "com.coremedia.blueprint.studio.contenthub.vimeo.ContentHubVimeoStudioPlugin";
 
-  #__initialize__(config: Config<ContentHubVimeoStudioPlugin>): void {
-    console.log("MOEP");
-    console.trace("WHOOP")
-  }
-
   constructor(config: Config<ContentHubVimeoStudioPlugin> = null) {
-
-
-    super((()=>{
-      this.#__initialize__(config);
-      return ConfigUtils.apply(Config(ContentHubVimeoStudioPlugin, {
-
+    super(ConfigUtils.apply(Config(ContentHubVimeoStudioPlugin, {
       configuration: [
         new CopyResourceBundleProperties({
           destination: resourceManager.getResourceBundle(null, ContentHub_properties),
           source: resourceManager.getResourceBundle(null, ContentHubVimeo_properties),
         }),
       ],
-
-    }), config);
-    })());
+    }), config));
   }
 }
 
