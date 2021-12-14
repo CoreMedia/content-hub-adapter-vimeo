@@ -1,4 +1,6 @@
+import SvgIconUtil from "@coremedia/studio-client.cap-base-models/util/SvgIconUtil";
 import CoreIcons_properties from "@coremedia/studio-client.core-icons/CoreIcons_properties";
+import icon from "./icons/vimeo.svg";
 
 /**
  * Interface values for ResourceBundle "ContentHubVimeo".
@@ -42,9 +44,9 @@ interface ContentHubVimeo_properties {
  */
 const ContentHubVimeo_properties: ContentHubVimeo_properties = {
   adapter_type_vimeo_name: "Vimeo",
-  adapter_type_vimeo_icon: CoreIcons_properties.youtube,
+  adapter_type_vimeo_icon: SvgIconUtil.getIconStyleClassForSvgIcon(icon),
   folder_type_vimeoRoot_name: "Account",
-  folder_type_vimeoRoot_icon: CoreIcons_properties.youtube,
+  folder_type_vimeoRoot_icon: SvgIconUtil.getIconStyleClassForSvgIcon(icon),
   folder_type_vimeoFolder_name: "Folder",
   folder_type_vimeoFolder_icon: CoreIcons_properties.folder,
   item_type_vimeoVideo_name: "Video",
