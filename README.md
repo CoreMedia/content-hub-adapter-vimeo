@@ -9,13 +9,26 @@ If a project is inactive it means that the development has been discontinued and
 ![Vimeo API Used](https://img.shields.io/static/v1?message=v3.4&label=Vimeo&20API&style=for-the-badge&labelColor=6FC3B8&color=006CAE "CoreMedia Labs projects may depend on third party systems or APIs. This badge type shows the version number that is required for the selected project version.")
 
 # Content Hub Adapter for Vimeo
-The **content-hub-adapter-vimeo** extension is providing access to content of a Vimeo repository via configuration. 
+The **content-hub-adapter-vimeo** plugin is providing access to content of a Vimeo repository via configuration. 
 Content stored in Vimeo is available as an additional tree inside the CoreMedia Studio after a successful configuration of the content-hub-adapter.
 
-## Issues
+## Versioning
+The main branch of this project is suitable for CoreMedia versions since 2101.
+It is based on the plugin architecture.
+
+## Documentation & Tutorial
+
+* **[Documentation](docs/README.md)**
+
+  for guides for editors, administrators and developers
+
+* **[Changelog](CHANGELOG.md)**
+
+  for recent changes
+
 * **[Issues](https://github.com/CoreMedia/content-hub-adapter-vimeo/issues)**
 
-    for known bugs and feature requests
+  for known bugs and feature requests
 
 ## CoreMedia Labs
 
