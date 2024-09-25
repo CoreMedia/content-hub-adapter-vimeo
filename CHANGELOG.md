@@ -1,30 +1,35 @@
 Changelog
 ================================================================================
 
-2.0.1
---------------------------------------------------------------------------------
+## 2.0.3
 
-### General Notes
+- Refactored search functionality
+  - Search on root folder will search the full library now
+- Jackson library updated to version `2.14.3`
+- Compatible CoreMedia Content Cloud version: `2404.1`
 
-* Update to latest dependencies
+## 2.0.2
 
-2.0.0
---------------------------------------------------------------------------------
+- Documentation updated
+- Compatible CoreMedia Content Cloud version: `2404.1`
 
-### General Notes
 
-* Update to CMCC11
+## 2.0.1
 
-1.0.2
---------------------------------------------------------------------------------
+- Dependency updates
+- Compatible CoreMedia Content Cloud version: `2110.2`
 
-### General Notes
+## 2.0.0
 
-* Remove file extension from content name and title when importing content
+- Bugfixes and refactorings
+- Compatible CoreMedia Content Cloud version: `2110.1`
 
-1.0.1
---------------------------------------------------------------------------------
+## 1.0.2
 
-### General Notes
+- Remove file extension from content name and title when importing content
+- Compatible CoreMedia Content Cloud version: `2110.1`
 
-* Initial implementation
+## 1.0.1
+
+- Initial implementation
+- Compatible CoreMedia Content Cloud version: `2101.1`
