@@ -121,10 +121,46 @@ public class VimeoService {
         return response.getBody();
     }
 
-    public List<VideoRepresentation> searchVideos(@NonNull String query, int folderId, int limit) {
-        if (StringUtils.isBlank(query)) {
-            return Collections.emptyList();
-        }
+  /**
+   * Search for videos.
+   *
+   * @param query search term
+   * @param limit limit
+   * @return
+   */
+  public List<VideoRepresentation> searchVideos(String query, int limit) {
+    int perPage = limit > 0 && limit <= 100 ? limit : 100;
+    ResponseEntity<PagedResponse<VideoRepresentation>> response = performApiCall("/users/{userId}/videos?direction=asc&per_page=100&sort=default",
+            Map.of(
+                    "userId", userId
+            ),
+            Map.of(
+                    "query", query,
+                    "direction", "asc",
+                    "per_page", perPage,
+                    "sort", "alphabetical"
+            ),
+            new ParameterizedTypeReference<PagedResponse<VideoRepresentation>>() {
+            }
+    );
+
+    return Optional.ofNullable(response.getBody())
+            .map(PagedResponse::getData)
+            .orElse(Collections.emptyList());
+  }
+
+  /**
+   * Search for videos in the given folder.
+   *
+   * @param query    search query
+   * @param folderId folder id
+   * @param limit    limit
+   * @return
+   */
+  public List<VideoRepresentation> searchVideosInFolder(@NonNull String query, int folderId, int limit) {
+    if (StringUtils.isBlank(query)) {
+      return Collections.emptyList();
+    }
 
         int perPage = limit > 0 && limit <= 100 ? limit : 100;
         ResponseEntity<PagedResponse<VideoRepresentation>> response = performApiCall("/users/{userId}/projects/{projectId}/videos?direction=asc&per_page=100&sort=default",

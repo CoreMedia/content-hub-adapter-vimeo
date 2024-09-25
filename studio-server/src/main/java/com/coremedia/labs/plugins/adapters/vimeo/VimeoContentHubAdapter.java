@@ -148,18 +148,21 @@ public class VimeoContentHubAdapter implements ContentHubAdapter, ContentHubSear
                                          int limit) {
         ContentHubSearchResult result = new ContentHubSearchResult(Collections.emptyList());
 
-        // Search is just supported in sub-folders and must contain a query string
-        if (rootFolder.equals(belowFolder) || StringUtils.isBlank(query)) {
-            return result;
-        }
+    if (rootFolder.equals(belowFolder)) {
+      // search videos in library
+      List<VideoRepresentation> searchResults = vimeoService.searchVideos(query, limit);
+      List<VimeoVideoItem> hits = searchResults.stream().map(this::createVideoItem).collect(Collectors.toUnmodifiableList());
+      result = new ContentHubSearchResult(hits, hits.size());
 
-        int folderId = extractIdFromUri(belowFolder.getId().getExternalId());
-        if (StringUtils.isNotBlank(query) && folderId > 0) {
-            List<VideoRepresentation> searchResults = vimeoService.searchVideos(query, folderId, limit);
-            List<VimeoVideoItem> hits = searchResults.stream().map(this::createVideoItem).collect(Collectors.toUnmodifiableList());
-            result = new ContentHubSearchResult(hits, hits.size());
-        }
-
+    } else if (belowFolder != null){
+      // search videos in folder
+      int folderId = extractIdFromUri(belowFolder.getId().getExternalId());
+      if (folderId > 0) {
+        List<VideoRepresentation> searchResults = vimeoService.searchVideosInFolder(query, folderId, limit);
+        List<VimeoVideoItem> hits = searchResults.stream().map(this::createVideoItem).collect(Collectors.toUnmodifiableList());
+        result = new ContentHubSearchResult(hits, hits.size());
+      }
+    }
 
         return result;
     }

@@ -58,8 +58,14 @@ public class VimeoServiceIT {
 
   @Test
   public void testSearchVideos() {
-    List<VideoRepresentation> hits = testling.searchVideos("lilly", FOLDER_ID, 100);
+    List<VideoRepresentation> hits = testling.searchVideos("color", 100);
     assertEquals(1, hits.size());
+  }
+
+  @Test
+  public void testSearchVideosInFolder() {
+    List<VideoRepresentation> hits = testling.searchVideosInFolder("summer", FOLDER_ID, 100);
+    assertEquals(2, hits.size());
   }
 
 }
