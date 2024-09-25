@@ -32,121 +32,121 @@ import java.util.stream.Collectors;
 
 public class VimeoContentHubAdapter implements ContentHubAdapter, ContentHubSearchService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VimeoContentHubAdapter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VimeoContentHubAdapter.class);
 
-    private final String connectionId;
-    private final VimeoContentHubSettings settings;
+  private final String connectionId;
+  private final VimeoContentHubSettings settings;
 
-    private VimeoService vimeoService;
+  private VimeoService vimeoService;
 
-    private VimeoFolder rootFolder;
+  private VimeoFolder rootFolder;
 
-    public VimeoContentHubAdapter(VimeoContentHubSettings settings, String connectionId) {
-        this.settings = settings;
-        this.connectionId = connectionId;
+  public VimeoContentHubAdapter(VimeoContentHubSettings settings, String connectionId) {
+    this.settings = settings;
+    this.connectionId = connectionId;
 
-        rootFolder = new VimeoFolder(new ContentHubObjectId(connectionId, "root"), settings.getDisplayName(), VimeoContentHubType.ROOT);
+    rootFolder = new VimeoFolder(new ContentHubObjectId(connectionId, "root"), settings.getDisplayName(), VimeoContentHubType.ROOT);
 
-        vimeoService = new VimeoService(settings.getUserId(), settings.getAccessToken(), settings.getApiEndpoint());
+    vimeoService = new VimeoService(settings.getUserId(), settings.getAccessToken(), settings.getApiEndpoint());
+  }
+
+  // --- ContentHubAdapter ---------------------------------------------------------------------------------------------
+
+  @Override
+  public Folder getRootFolder(ContentHubContext context) throws ContentHubException {
+    return rootFolder;
+  }
+
+  @Nullable
+  @Override
+  public Folder getFolder(ContentHubContext context, ContentHubObjectId id) throws ContentHubException {
+    if (rootFolder.getId().equals(id)) {
+      return rootFolder;
     }
 
-    // --- ContentHubAdapter ---------------------------------------------------------------------------------------------
+    VimeoFolder folder = Optional.of(extractIdFromUri(id.getExternalId()))
+            .map(folderId -> vimeoService.getFolderById(folderId))
+            .map(this::createVimeoFolder)
+            .orElse(null);
 
-    @Override
-    public Folder getRootFolder(ContentHubContext context) throws ContentHubException {
-        return rootFolder;
+    return folder;
+  }
+
+  public List<Folder> getSubFolders(ContentHubContext context, Folder folder) throws ContentHubException {
+    List<Folder> folders = Collections.emptyList();
+    if (rootFolder == folder) {
+      folders = vimeoService.listFolders()
+              .stream()
+              .map(this::createVimeoFolder)
+              .collect(Collectors.toUnmodifiableList());
+      return folders;
+    }
+    return folders;
+  }
+
+  @Nullable
+  @Override
+  public Folder getParent(ContentHubContext context, ContentHubObject contentHubObject) throws ContentHubException {
+    Folder parent = (rootFolder == contentHubObject) ? null : getRootFolder(context);
+    return parent;
+  }
+
+  public List<Item> getItems(ContentHubContext context, Folder folder) throws ContentHubException {
+    List<Item> items = Collections.emptyList();
+
+    int folderId = extractIdFromUri(folder.getId().getExternalId());
+    if (folderId > 0) {
+      items = vimeoService.getVideosInFolder(folderId).stream()
+              .map(this::createVideoItem)
+              .collect(Collectors.toUnmodifiableList());
     }
 
-    @Nullable
-    @Override
-    public Folder getFolder(ContentHubContext context, ContentHubObjectId id) throws ContentHubException {
-        if (rootFolder.getId().equals(id)) {
-            return rootFolder;
-        }
+    return items;
+  }
 
-        VimeoFolder folder = Optional.of(extractIdFromUri(id.getExternalId()))
-                .map(folderId -> vimeoService.getFolderById(folderId))
-                .map(this::createVimeoFolder)
-                .orElse(null);
+  @Nullable
+  @Override
+  public Item getItem(ContentHubContext context, ContentHubObjectId id) throws ContentHubException {
+    int videoId = extractIdFromUri(id.getExternalId());
+    return Optional.ofNullable(vimeoService.getVideoById(videoId))
+            .map(this::createVideoItem)
+            .orElse(null);
+  }
 
-        return folder;
-    }
+  @Override
+  public GetChildrenResult getChildren(ContentHubContext context, Folder folder, @Nullable PaginationRequest paginationRequest) {
+    List<ContentHubObject> children = new ArrayList<>();
+    children.addAll(getSubFolders(context, folder));
+    children.addAll(getItems(context, folder));
+    return new GetChildrenResult(children);
+  }
 
-    public List<Folder> getSubFolders(ContentHubContext context, Folder folder) throws ContentHubException {
-        List<Folder> folders = Collections.emptyList();
-        if (rootFolder == folder) {
-             folders = vimeoService.listFolders()
-                    .stream()
-                    .map(this::createVimeoFolder)
-                    .collect(Collectors.toUnmodifiableList());
-            return folders;
-        }
-        return folders;
-    }
-
-    @Nullable
-    @Override
-    public Folder getParent(ContentHubContext context, ContentHubObject contentHubObject) throws ContentHubException {
-        Folder parent = (rootFolder == contentHubObject) ? null : getRootFolder(context);
-        return parent;
-    }
-
-    public List<Item> getItems(ContentHubContext context, Folder folder) throws ContentHubException {
-        List<Item> items = Collections.emptyList();
-
-        int folderId = extractIdFromUri(folder.getId().getExternalId());
-        if (folderId > 0) {
-            items = vimeoService.getVideosInFolder(folderId).stream()
-                    .map(this::createVideoItem)
-                    .collect(Collectors.toUnmodifiableList());
-        }
-
-        return items;
-    }
-
-    @Nullable
-    @Override
-    public Item getItem(ContentHubContext context, ContentHubObjectId id) throws ContentHubException {
-        int videoId = extractIdFromUri(id.getExternalId());
-        return Optional.ofNullable(vimeoService.getVideoById(videoId))
-                .map(this::createVideoItem)
-                .orElse(null);
-    }
-
-    @Override
-    public GetChildrenResult getChildren(ContentHubContext context, Folder folder, @Nullable PaginationRequest paginationRequest) {
-        List<ContentHubObject> children = new ArrayList<>();
-        children.addAll(getSubFolders(context, folder));
-        children.addAll(getItems(context, folder));
-        return new GetChildrenResult(children);
-    }
-
-    @Override
-    public ContentHubTransformer transformer() {
-        return new VimeoContentHubTransformer();
-    }
+  @Override
+  public ContentHubTransformer transformer() {
+    return new VimeoContentHubTransformer();
+  }
 
 
-    // --- ContentHubSearchService ---------------------------------------------------------------------------------------
+  // --- ContentHubSearchService ---------------------------------------------------------------------------------------
 
-    private static final List<ContentHubType> SEARCH_TYPES = List.of(
-            VimeoContentHubType.VIDEO.getType()
-    );
+  private static final List<ContentHubType> SEARCH_TYPES = List.of(
+          VimeoContentHubType.VIDEO.getType()
+  );
 
-    @NonNull
-    @Override
-    public Optional<ContentHubSearchService> searchService() {
-        return Optional.of(this);
-    }
+  @NonNull
+  @Override
+  public Optional<ContentHubSearchService> searchService() {
+    return Optional.of(this);
+  }
 
-    @Override
-    public ContentHubSearchResult search(@NonNull String query,
-                                         @Nullable Folder belowFolder,
-                                         @Nullable ContentHubType type,
-                                         Collection<String> filterQueries,
-                                         List<Sort> sortCriteria,
-                                         int limit) {
-        ContentHubSearchResult result = new ContentHubSearchResult(Collections.emptyList());
+  @Override
+  public ContentHubSearchResult search(@NonNull String query,
+                                       @Nullable Folder belowFolder,
+                                       @Nullable ContentHubType type,
+                                       Collection<String> filterQueries,
+                                       List<Sort> sortCriteria,
+                                       int limit) {
+    ContentHubSearchResult result = new ContentHubSearchResult(Collections.emptyList());
 
     if (rootFolder.equals(belowFolder)) {
       // search videos in library
@@ -164,42 +164,43 @@ public class VimeoContentHubAdapter implements ContentHubAdapter, ContentHubSear
       }
     }
 
-        return result;
-    }
+    return result;
+  }
 
-    @Override
-    public boolean supportsSearchBelowFolder() {
-        return true;
-    }
+  @Override
+  public boolean supportsSearchBelowFolder() {
+    return true;
+  }
 
-    @Override
-    public Collection<ContentHubType> supportedTypes() {
-        return SEARCH_TYPES;
-    }
+  @Override
+  public Collection<ContentHubType> supportedTypes() {
+    return SEARCH_TYPES;
+  }
 
-    // --- INTERNAL ------------------------------------------------------------------------------------------------------
+  // --- INTERNAL ------------------------------------------------------------------------------------------------------
 
-    private VimeoFolder createVimeoFolder(@NonNull FolderRepresentation folder) {
-        ContentHubObjectId hubId = new ContentHubObjectId(connectionId, folder.getUri());
-        return new VimeoFolder(hubId, folder.getName());
-    }
+  private VimeoFolder createVimeoFolder(@NonNull FolderRepresentation folder) {
+    ContentHubObjectId hubId = new ContentHubObjectId(connectionId, folder.getUri());
+    return new VimeoFolder(hubId, folder.getName());
+  }
 
-    private VimeoVideoItem createVideoItem(@NonNull VideoRepresentation video) {
-        ContentHubObjectId hubId = new ContentHubObjectId(connectionId, video.getUri());
-        return new VimeoVideoItem(hubId, video);
-    }
+  private VimeoVideoItem createVideoItem(@NonNull VideoRepresentation video) {
+    ContentHubObjectId hubId = new ContentHubObjectId(connectionId, video.getUri());
+    return new VimeoVideoItem(hubId, video);
+  }
 
-    /**
-     * Extract the numeric entity id from the given entity uri.
-     * @param uri
-     * @return
-     */
-    private int extractIdFromUri(String uri) {
-        return Arrays.stream(uri.split("/"))
-                .reduce((first, second) -> second)
-                .filter(StringUtils::isNumeric)
-                .map(Integer::parseInt)
-                .orElse(-1);
-    }
+  /**
+   * Extract the numeric entity id from the given entity uri.
+   *
+   * @param uri
+   * @return
+   */
+  private int extractIdFromUri(String uri) {
+    return Arrays.stream(uri.split("/"))
+            .reduce((first, second) -> second)
+            .filter(StringUtils::isNumeric)
+            .map(Integer::parseInt)
+            .orElse(-1);
+  }
 
 }
