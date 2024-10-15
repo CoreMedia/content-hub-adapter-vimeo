@@ -6,6 +6,7 @@ import com.coremedia.contenthub.api.UrlBlobBuilder;
 import com.coremedia.contenthub.api.preview.DetailsElement;
 import com.coremedia.contenthub.api.preview.DetailsSection;
 import com.coremedia.labs.plugins.adapters.vimeo.service.responses.PictureRepresentation;
+import com.coremedia.labs.plugins.adapters.vimeo.service.responses.TagResponse;
 import com.coremedia.labs.plugins.adapters.vimeo.service.responses.VideoRepresentation;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -82,6 +83,7 @@ public class VimeoVideoItem extends VimeoItem {
             new DetailsSection("metadata", Stream.of(
                     new DetailsElement<>("description", getVideo().getDescription()),
                     new DetailsElement<>("duration", formatDuration(getVideo().getDuration())),
+                    new DetailsElement<>("tags", formatTags(getVideo().getTags())),
                     new DetailsElement<>("dimensions", formatDimensions(getVideo().getWidth(), getVideo().getHeight())),
                     new DetailsElement<>("contentRating", formatContentRating(getVideo())),
                     new DetailsElement<>("createdAt", formatPreviewDate(getVideo().getCreatedTime())),
@@ -113,6 +115,10 @@ public class VimeoVideoItem extends VimeoItem {
 
   private String formatDuration(int duration) {
     return DurationFormatUtils.formatDuration(duration * 1000L, "HH:mm:ss");
+  }
+
+  private String formatTags(List<TagResponse> tags) {
+    return tags.stream().map(TagResponse::getName).collect(Collectors.joining(", "));
   }
 
   private String formatDimensions(int width, int height) {

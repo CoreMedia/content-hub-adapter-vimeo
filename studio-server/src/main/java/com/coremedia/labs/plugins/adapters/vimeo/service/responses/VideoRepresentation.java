@@ -201,7 +201,7 @@ public class VideoRepresentation {
      * An array of all tags assigned to the video.
      */
     @JsonProperty("tags")
-    private List<String> tags;
+    private List<TagResponse> tags;
 
     /**
      * The transcode information of the video upload.
@@ -470,15 +470,15 @@ public class VideoRepresentation {
         this.status = status;
     }
 
-    public List<String> getTags() {
-        return tags;
-    }
+  public List<TagResponse> getTags() {
+    return tags;
+  }
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
+  public void setTags(List<TagResponse> tags) {
+    this.tags = tags;
+  }
 
-    public Map<String, Object> getTranscode() {
+  public Map<String, Object> getTranscode() {
         return transcode;
     }
 

@@ -1,5 +1,8 @@
-Changelog
-================================================================================
+# Changelog
+
+## 2.0.4
+- Fixed issue with tag handling
+- Compatible CoreMedia Content Cloud version: `2404.1`
 
 ## 2.0.3
 

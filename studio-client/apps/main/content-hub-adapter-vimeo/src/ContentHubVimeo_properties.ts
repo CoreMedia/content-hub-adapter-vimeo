@@ -34,6 +34,7 @@ interface ContentHubVimeo_properties {
   createdAt_sectionItemKey: string;
   updatedAt_sectionItemKey: string;
   duration_sectionItemKey: string;
+  tags_sectionItemKey: string;
   contentRating_sectionItemKey: string;
   status_sectionItemKey: string;
 }
@@ -57,6 +58,7 @@ const ContentHubVimeo_properties: ContentHubVimeo_properties = {
   createdAt_sectionItemKey: "Created at",
   updatedAt_sectionItemKey: "Updated at",
   duration_sectionItemKey: "Duration",
+  tags_sectionItemKey: "Tags",
   contentRating_sectionItemKey: "Content Rating",
   status_sectionItemKey: "Status",
 };
