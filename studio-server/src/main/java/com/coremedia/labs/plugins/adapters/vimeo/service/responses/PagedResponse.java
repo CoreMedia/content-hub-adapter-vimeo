@@ -1,10 +1,12 @@
 package com.coremedia.labs.plugins.adapters.vimeo.service.responses;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PagedResponse<T> {
 
     @JsonProperty("total")

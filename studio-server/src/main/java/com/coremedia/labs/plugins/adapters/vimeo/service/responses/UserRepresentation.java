@@ -1,6 +1,7 @@
 package com.coremedia.labs.plugins.adapters.vimeo.service.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.ZonedDateTime;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import static com.coremedia.labs.plugins.adapters.vimeo.service.VimeoConstants.DATE_TIME_PATTERN;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRepresentation {
 
     /**

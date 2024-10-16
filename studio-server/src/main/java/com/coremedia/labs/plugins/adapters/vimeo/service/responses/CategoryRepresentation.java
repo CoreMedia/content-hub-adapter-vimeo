@@ -1,13 +1,16 @@
 package com.coremedia.labs.plugins.adapters.vimeo.service.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 
 import static com.coremedia.labs.plugins.adapters.vimeo.service.VimeoConstants.DATE_TIME_PATTERN;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoryRepresentation {
 
     /**
@@ -69,7 +72,7 @@ public class CategoryRepresentation {
      * All the subcategories that belong to the category, if the current category is a top-level parent.
      */
     @JsonProperty("subcategories")
-    private Map<String, Object> subcategories;
+    private List<Object> subcategories;
 
 
     /**
@@ -156,15 +159,15 @@ public class CategoryRepresentation {
         this.resourceKey = resourceKey;
     }
 
-    public Map<String, Object> getSubcategories() {
-        return subcategories;
-    }
+  public List<Object> getSubcategories() {
+    return subcategories;
+  }
 
-    public void setSubcategories(Map<String, Object> subcategories) {
-        this.subcategories = subcategories;
-    }
+  public void setSubcategories(List<Object> subcategories) {
+    this.subcategories = subcategories;
+  }
 
-    public boolean isTopLevel() {
+  public boolean isTopLevel() {
         return topLevel;
     }
 

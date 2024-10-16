@@ -1,6 +1,7 @@
 package com.coremedia.labs.plugins.adapters.vimeo.service.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.ZonedDateTime;
@@ -11,6 +12,7 @@ import static com.coremedia.labs.plugins.adapters.vimeo.service.VimeoConstants.D
 /**
  * Folder (aka Project) representation.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FolderRepresentation {
 
     /**
