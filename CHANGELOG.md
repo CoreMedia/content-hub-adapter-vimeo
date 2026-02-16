@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.6
+
+- Compatible CoreMedia Content Cloud version: `2512.0.0`
+
 ## 2.0.5
  
 - Fixed issue with category handling

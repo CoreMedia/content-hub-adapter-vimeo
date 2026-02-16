@@ -1,5 +1,5 @@
 import SvgIconUtil from "@coremedia/studio-client.base-models/util/SvgIconUtil";
-import CoreIcons_properties from "@coremedia/studio-client.core-icons/CoreIcons_properties";
+import { folder, loadedVideoPlaceholder } from "@coremedia/studio-client.common-icons";
 import icon from "./icons/vimeo.svg";
 
 /**
@@ -49,9 +49,9 @@ const ContentHubVimeo_properties: ContentHubVimeo_properties = {
   folder_type_vimeoRoot_name: "Account",
   folder_type_vimeoRoot_icon: SvgIconUtil.getIconStyleClassForSvgIcon(icon),
   folder_type_vimeoFolder_name: "Folder",
-  folder_type_vimeoFolder_icon: CoreIcons_properties.folder,
+  folder_type_vimeoFolder_icon: SvgIconUtil.getIconStyleClassForSvgIcon(folder),
   item_type_vimeoVideo_name: "Video",
-  item_type_vimeoVideo_icon: CoreIcons_properties.loaded_video_placeholder,
+  item_type_vimeoVideo_icon: SvgIconUtil.getIconStyleClassForSvgIcon(loadedVideoPlaceholder),
   description_sectionItemKey: "Description",
   dimensions_sectionItemKey: "Dimensions",
   color_sectionItemKey: "Color",
