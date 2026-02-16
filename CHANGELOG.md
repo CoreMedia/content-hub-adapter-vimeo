@@ -1,7 +1,7 @@
 # Changelog
 
-## 2.0.6
-
+## 3.0.0
+- CMCC 13 update
 - Compatible CoreMedia Content Cloud version: `2512.0.0`
 
 ## 2.0.5
