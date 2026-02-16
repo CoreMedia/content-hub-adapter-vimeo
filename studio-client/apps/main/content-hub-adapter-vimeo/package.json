@@ -25,6 +25,7 @@
     "build": "jangaroo build",
     "watch": "jangaroo watch",
     "start": "jangaroo run",
+    "package": "jangaroo package",
     "lint": "eslint"
   },
   "exports": {
